@@ -8,6 +8,8 @@ let yourAceCount = 0;
 let hidden;
 let deck;
 
+let doubleAflag;
+
 let canHit = true; //allows the player (you) to draw while yourSum <= 21
 
 window.onload = function() {
@@ -48,15 +50,26 @@ function startGame() {
     dealerAceCount += checkAce(hidden);
 
     // dealerのカード設定
-    while (dealerSum < 17) {
+    // 最初に計算させるパターン(デフォルト)
+    // while (dealerSum < 17) {
+    //   let cardImg = document.createElement("img");
+    //   let card = deck.pop();
+    //   cardImg.src = "./cards/" + card + ".png";
+    //   dealerSum += getValue(card);
+    //   dealerAceCount += checkAce(card);
+    //   document.getElementById("dealer-cards").append(cardImg);
+    // }
+
+    // dealerのカードを1枚だけ表示させる
+    {
       let cardImg = document.createElement("img");
       let card = deck.pop();
       cardImg.src = "./cards/" + card + ".png";
       dealerSum += getValue(card);
       dealerAceCount += checkAce(card);
       document.getElementById("dealer-cards").append(cardImg);
+      console.log(dealerSum);
     }
-    console.log(dealerSum);
     
     // playerのカード設定
     for (let i = 0; i < 2; i++) {
@@ -95,11 +108,36 @@ function hit() {
 
 // ステイする(ゲーム終了)
 function stay() {
-    dealerSum = reduceAce(dealerSum, dealerAceCount);
-    yourSum = reduceAce(yourSum, yourAceCount);
+  yourSum = reduceAce(yourSum, yourAceCount);
+  
+  canHit = false;
+  document.getElementById("hidden").src = "./cards/" + hidden + ".png";
+  
+  //ディーラーが両方Aの時の処理(dealerSumが17以下になるように読み替える)
+  if (dealerSum == 22 && dealerAceCount == 2){
+    dealerSum -= 10;
+    dealerAceCount -= 1;
+    doubleAflag = true;
+  }
 
-    canHit = false;
-    document.getElementById("hidden").src = "./cards/" + hidden + ".png";
+  // ゲーム終了時にディーラー側にカードを引かせる
+  while (dealerSum < 17) {
+    if (doubleAflag) {
+      dealerSum += 10;
+      dealerAceCount += 1;
+      doubleAflag = false;
+    }
+    let cardImg = document.createElement("img");
+    let card = deck.pop();
+    cardImg.src = "./cards/" + card + ".png";
+    dealerSum += getValue(card);
+    dealerAceCount += checkAce(card);
+    document.getElementById("dealer-cards").append(cardImg);
+    while (dealerSum > 21 && dealerAceCount > 0) {
+      dealerSum -= 10;
+      dealerAceCount -= 1;
+    }
+  }
 
     let message = "";
     if (yourSum > 21) {
