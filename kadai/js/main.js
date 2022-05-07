@@ -138,7 +138,7 @@ function getValue(card) {
     return parseInt(value);
 }
 
-// エースの確認
+// エースを確認
 function checkAce(card) {
     if (card[0] == "A") {
         return 1;
