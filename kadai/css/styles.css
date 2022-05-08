@@ -26,3 +26,13 @@ body {
     height: 50px;
     font-size: 20px;
 }
+
+#nextgame {
+    width: 150px;
+    height: 30px;
+    font-size: 20px;
+}
+
+#results {
+    font-size: 50px;
+}

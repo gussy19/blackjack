@@ -18,6 +18,11 @@ window.onload = function() {
     startGame();
 }
 
+// 次のゲームを始める
+document.getElementById("nextgame").onclick = function(){
+  window.location.reload();
+}
+
 //トランプデッキの作成
 function buildDeck() {
     let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
@@ -29,7 +34,6 @@ function buildDeck() {
             deck.push(values[j] + "-" + types[i]); //A-C -> K-C, A-D -> K-D
         }
     }
-    // console.log(deck);
 }
 
 //トランプデッキのシャッフル
@@ -103,7 +107,6 @@ function hit() {
     if (reduceAce(yourSum, yourAceCount) > 21) { //A, J, 8 -> 1 + 10 + 8
         canHit = false;
     }
-
 }
 
 // ステイする(ゲーム終了)
@@ -113,38 +116,43 @@ function stay() {
   canHit = false;
   document.getElementById("hidden").src = "./cards/" + hidden + ".png";
   
-  //ディーラーが両方Aの時の処理(dealerSumが17以下になるように読み替える)
+  //ディーラーが両方Aの時の処理(両方Aの時だけ22と読んで処理が走らなくなってしまうので、dealerSumが17以下になるように一旦修正する)
   if (dealerSum == 22 && dealerAceCount == 2){
     dealerSum -= 10;
     dealerAceCount -= 1;
     doubleAflag = true;
   }
+  
 
   // ゲーム終了時にディーラー側にカードを引かせる
   while (dealerSum < 17) {
+    //両方AAの時だけの例外修正処理をもとに戻す
     if (doubleAflag) {
       dealerSum += 10;
       dealerAceCount += 1;
       doubleAflag = false;
     }
+    // カードを引く
     let cardImg = document.createElement("img");
     let card = deck.pop();
     cardImg.src = "./cards/" + card + ".png";
     dealerSum += getValue(card);
     dealerAceCount += checkAce(card);
     document.getElementById("dealer-cards").append(cardImg);
+    //22より大きくてAが手札に含まれる場合は、11を1に読み替える処理を行う
     while (dealerSum > 21 && dealerAceCount > 0) {
       dealerSum -= 10;
       dealerAceCount -= 1;
     }
   }
 
+  //勝敗判定する
     let message = "";
     if (yourSum > 21) {
         message = "You Lose!";
     }
     else if (dealerSum > 21) {
-        message = "You win!";
+        message = "You Win!";
     }
     //both you and dealer <= 21
     else if (yourSum == dealerSum) {
@@ -159,7 +167,13 @@ function stay() {
 
     document.getElementById("dealer-sum").innerText = dealerSum;
     document.getElementById("your-sum").innerText = yourSum;
-    document.getElementById("results").innerText = message;
+    
+    //時間差で結果を表示
+    setTimeout(
+      function showResult() {
+        document.getElementById("results").innerText = message;
+      },1000
+    )
 }
 
 //カードの値を取得する
