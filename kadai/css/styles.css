@@ -3,6 +3,7 @@ body {
     text-align: center;
 }
 
+
 #dealer-cards img {
     height: 175px;
     width: 125px;
@@ -14,6 +15,7 @@ body {
     width: 125px;
     margin: 1px;
 }
+
 
 #hit {
     width: 100px;
@@ -34,5 +36,22 @@ body {
 }
 
 #results {
-    font-size: 50px;
+    font-size: 40px;
+    font-weight: bold;
+    height: 40px;
 }
+
+@media screen and (max-width: 576px){
+    /*SP 時の CSS をここに記入 */
+    #dealer-cards img {
+        height: 112px;
+        width: 80px;
+        margin: 1px;
+    }
+    
+    #your-cards img {
+        height: 112px;
+        width: 80px;
+        margin: 1px;
+    }
+ }

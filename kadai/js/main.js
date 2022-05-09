@@ -10,7 +10,7 @@ let deck;
 let doubleAflag;
 
 // 点数計算
-const storage = localStorage;
+const storage = sessionStorage;
 let winstore;
 let losestore;
 let tiestore;
@@ -194,22 +194,18 @@ function stay() {
     document.getElementById("dealer-sum").innerText = dealerSum;
     document.getElementById("your-sum").innerText = yourSum;
     
-    // 勝敗の記録
-    document.getElementById("win").textContent = `${winstore}`;
-    storage.setItem('win', winstore); // ストレージに記録
-    document.getElementById("lose").textContent = `${losestore}`;
-    storage.setItem('lose', losestore); // ストレージに記録
-    document.getElementById("tie").textContent = `${tiestore}`;
-    storage.setItem('tie', tiestore); // ストレージに記録
-    console.log(storage);
-    console.log(winstore);
-    console.log(losestore);
-    console.log(tiestore);
-
+    
     //時間差で結果を表示
     setTimeout(
       function showResult() {
         document.getElementById("results").innerText = message;
+        // 勝敗の記録
+        document.getElementById("win").textContent = `${winstore}`;
+        storage.setItem('win', winstore); // ストレージに記録
+        document.getElementById("lose").textContent = `${losestore}`;
+        storage.setItem('lose', losestore); // ストレージに記録
+        document.getElementById("tie").textContent = `${tiestore}`;
+        storage.setItem('tie', tiestore); // ストレージに記録
       },1000
     )
 }
