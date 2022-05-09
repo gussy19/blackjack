@@ -1,8 +1,10 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
+    background-color: #000000;
+    background-image: url("../img/med.jpg");
+    color: white;
 }
-
 
 #dealer-cards img {
     height: 175px;

@@ -76,17 +76,6 @@ function startGame() {
     dealerSum += getValue(hidden);
     dealerAceCount += checkAce(hidden);
 
-    // dealerのカード設定
-    // 最初に計算させるパターン(デフォルト)
-    // while (dealerSum < 17) {
-    //   let cardImg = document.createElement("img");
-    //   let card = deck.pop();
-    //   cardImg.src = "./cards/" + card + ".png";
-    //   dealerSum += getValue(card);
-    //   dealerAceCount += checkAce(card);
-    //   document.getElementById("dealer-cards").append(cardImg);
-    // }
-
     // dealerのカードを1枚だけ表示させる
     {
       let cardImg = document.createElement("img");
@@ -108,7 +97,8 @@ function startGame() {
     }
 
     document.getElementById("hit").addEventListener("click", hit);
-    document.getElementById("stay").addEventListener("click", stay);
+    // stayのクリックは一回までに限定(ゲーム終了イベントなので)
+    document.getElementById("stay").addEventListener("click", stay, { once: true });
 
 }
 
