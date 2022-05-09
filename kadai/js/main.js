@@ -1,4 +1,3 @@
-
 let dealerSum = 0;
 let yourSum = 0;
 
@@ -9,6 +8,31 @@ let hidden;
 let deck;
 
 let doubleAflag;
+
+// 点数計算
+const storage = localStorage;
+let winstore;
+let losestore;
+let tiestore;
+if (!storage.getItem('win')){
+  winstore = 0;
+} else {
+  winstore = Number(storage.getItem('win'));
+}
+if (!storage.getItem('lose')){
+  losestore = 0;
+} else {
+  losestore = Number(storage.getItem('lose'));
+}
+if (!storage.getItem('tie')){
+  tiestore = 0;
+} else {
+  tiestore = Number(storage.getItem('tie'));
+}
+console.log(storage);
+document.getElementById("win").textContent = `${winstore}`;
+document.getElementById("lose").textContent = `${losestore}`;
+document.getElementById("tie").textContent = `${tiestore}`;
 
 let canHit = true; //allows the player (you) to draw while yourSum <= 21
 
@@ -45,7 +69,6 @@ function shuffleDeck() {
         deck[j] = temp;
         //deckのi枚目(iは0-51回)とdeckのj枚目(jはランダム枚目)を入れ替えてシャッフル
     }
-    console.log(deck);
 }
 
 function startGame() {
@@ -72,7 +95,6 @@ function startGame() {
       dealerSum += getValue(card);
       dealerAceCount += checkAce(card);
       document.getElementById("dealer-cards").append(cardImg);
-      console.log(dealerSum);
     }
     
     // playerのカード設定
@@ -85,7 +107,6 @@ function startGame() {
         document.getElementById("your-cards").append(cardImg);
     }
 
-    console.log(yourSum);
     document.getElementById("hit").addEventListener("click", hit);
     document.getElementById("stay").addEventListener("click", stay);
 
@@ -150,24 +171,41 @@ function stay() {
     let message = "";
     if (yourSum > 21) {
         message = "You Lose!";
+        losestore++;
     }
     else if (dealerSum > 21) {
         message = "You Win!";
+        winstore++;
     }
     //both you and dealer <= 21
     else if (yourSum == dealerSum) {
         message = "Tie!";
+        tiestore++;
     }
     else if (yourSum > dealerSum) {
         message = "You Win!";
+        winstore++;
     }
     else if (yourSum < dealerSum) {
         message = "You Lose!";
+        losestore++;
     }
 
     document.getElementById("dealer-sum").innerText = dealerSum;
     document.getElementById("your-sum").innerText = yourSum;
     
+    // 勝敗の記録
+    document.getElementById("win").textContent = `${winstore}`;
+    storage.setItem('win', winstore); // ストレージに記録
+    document.getElementById("lose").textContent = `${losestore}`;
+    storage.setItem('lose', losestore); // ストレージに記録
+    document.getElementById("tie").textContent = `${tiestore}`;
+    storage.setItem('tie', tiestore); // ストレージに記録
+    console.log(storage);
+    console.log(winstore);
+    console.log(losestore);
+    console.log(tiestore);
+
     //時間差で結果を表示
     setTimeout(
       function showResult() {
